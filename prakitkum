@@ -1,0 +1,264 @@
+const express = require("express") // memanggil library express js
+const bodyParser = require("body-parser") // memanggil library body-parser
+const cors = require("cors") // memanggil library cors
+const app = express()
+
+// penggunaan body-parser untuk ekstrak data request berformat JSON
+app.use(bodyParser.json())
+// penggunaan body-parser untuk ekstrak data request dari body
+app.use(bodyParser.urlencoded({extended: true}))
+// penggunaan cors agar end point dapat diakses oleh cross platform
+app.use(cors())
+// menjalankan server pada port 8000
+app.listen(8000, () => {
+    console.log("Server run on port 8000");
+})
+
+//nomer 1 --------------------------------------------------------
+//end-point 1
+app.post("/kubus", (req,res) => {
+    let sisi = Number(req.body.sisi)
+
+    let luasPermukaan = sisi**3
+    let volume = 6*sisi**2
+
+    let response = {
+        sisi : sisi,
+        luasPermukaan : luasPermukaan,
+        volume : volume
+    }
+    res.json(response)
+})
+
+//end-point 2 
+app.post("/balok", (req,res) => {
+    let panjang = Number(req.body.panjang)
+    let lebar = Number(req.body.lebar)
+    let tinggi = Number(req.body.tinggi)
+
+    let luasPermukaan = panjang*lebar*tinggi
+    let volume = 2*(panjang*tinggi + panjang*lebar + lebar*tinggi)
+
+    let response = {
+        panjang : panjang,
+        lebar : lebar,
+        tinggi : tinggi,
+        luasPermukaan : luasPermukaan,
+        volume : volume
+    }
+    res.json(response)
+})
+
+//end-point 3 
+app.post("/tabung", (req,res) => {
+    let jarijari = Number(req.body.jarijari)
+    let tinggi = Number(req.body.tinggi)
+
+    let luasPermukaan = 2*3.14*jarijari*(jarijari+tinggi)
+    let volume = 3.14*jarijari**2*tinggi
+
+    let response = {
+        jarijari : jarijari,
+        tinggi : tinggi,
+        luasPermukaan : luasPermukaan,
+        volume : volume
+    }
+    res.json(response)
+})
+
+//end-point 4 
+app.post("/bola", (req,res) => {
+    let jarijari = Number(req.body.jarijari)
+
+    let luasPermukaan = 4*3.14*jarijari**2
+    let volume = 4/3*3.14*jarijari**3
+
+    let response = {
+        jarijari : jarijari,
+        luasPermukaan : luasPermukaan,
+        volume : volume
+    }
+    res.json(response)
+})
+
+//nomer 2 --------------------------------------------------------
+//end-point 1
+app.get("/convert/celcius/:celcius", (req,res) => {
+    let celcius = req.params.celcius
+
+    let reamur = celcius * 4/5
+    let faranheit = celcius * 9/5 + 32 
+    let kelvin = celcius * 1 + 273 
+    
+    let response = {
+        celcius : celcius,
+        result : {
+            reamur : reamur,
+            faranheit : faranheit,
+            kelvin : kelvin
+        } 
+    }
+
+    res.json(response)
+})
+
+//end-point 2
+app.get("/convert/reamur/:reamur", (req,res) => {
+    let reamur = req.params.reamur
+
+    let celcius = reamur * 5/4
+    let faranheit = 9/4 * reamur + 32 / 45 + 32 
+    let kelvin = 5/4 * reamur + 273
+    
+    let response = {
+        reamur : reamur,
+        result : {
+            celcius : celcius,
+            faranheit : faranheit,
+            kelvin : kelvin
+        } 
+    }
+
+    res.json(response)
+})
+
+//end-point 3
+app.get("/convert/kelvin/:kelvin", (req,res) => {
+    let kelvin = req.params.kelvin
+
+    let celcius = kelvin - 273
+    let faranheit = (kelvin - 273) * 9/5 + 32
+    let reamur = 4/5 * (kelvin - 273)
+    
+    let response = {
+        kelvin : kelvin,
+        result : {
+            celcius : celcius,
+            faranheit : faranheit,
+            reamur : reamur
+        }
+    }
+
+    res.json(response)
+})
+
+//end-point 4
+app.get("/convert/faranheit/:faranheit", (req,res) => {
+    let faranheit = req.params.faranheit
+
+    let celcius = (faranheit - 32) * 5/9 
+    let reamur = (faranheit-32) * 4/9
+    let kelvin = (faranheit - 32) * 5/9 + 273
+
+    let response = {
+        faranheit : faranheit,
+        result : {
+            celcius : celcius,
+            reamur : reamur,
+            kelvin : kelvin
+        }    
+    }
+
+    res.json(response)
+})
+
+//nomer 3 ----------------------------------------------
+//desimal
+app.post("/convert/desimal", (req,res) => {
+    let angka = Number(req.body.angka)
+
+    let biner = angka.toString(2)
+    let oktal = angka.toString(8)
+    let heksadesimal = angka.toString(16)
+
+    let response = {
+        desimal : angka,
+        biner : biner,
+        oktal : oktal,
+        heksadesimal : heksadesimal
+    }
+
+    res.json(response)
+})
+
+//biner
+app.post("/convert/biner", (req,res) => {
+    let angka = Number(req.body.angka)
+
+    let desimal = parseInt(angka,2)
+    let oktal = parseInt(angka,2).toString(8)
+    let heksadesimal = parseInt(angka,2).toString(16)
+
+    let response = {
+        biner : angka,
+        desimal : desimal,
+        oktal : oktal,
+        heksadesimal : heksadesimal
+    }
+
+    res.json(response)
+})
+
+//oktal
+app.post("/convert/oktal", (req,res) => {
+    let angka = Number(req.body.angka)
+
+    let desimal = parseInt(angka,8)
+    let biner = parseInt(angka,8).toString(2)
+    let heksadesimal = parseInt(angka,8).toString(16)
+
+    let response = {
+        oktal : angka,
+        desimal : desimal,
+        biner : biner,
+        heksadesimal : heksadesimal
+    }
+
+    res.json(response)
+})
+
+//heksadesimal
+app.post("/convert/heksadesimal", (req,res) => {
+    let angka = Number(req.body.angka)
+
+    let desimal = parseInt(angka,16)
+    let oktal = parseInt(angka,16).toString(8)
+    let biner = parseInt(angka,16).toString(2)
+
+    let response = {
+        heksadesimal : angka,
+        desimal : desimal,
+        oktal : oktal,
+        biner : biner
+    }
+
+    res.json(response)
+})
+
+//nomer 4 -----------------------------------------------------
+app.post("/bmi", (req,res) => {
+    let berat = Number(req.body.berat)
+    let tinggi = Number(req.body.tinggi)
+
+    let bmi = berat / tinggi**2
+    let status = null
+
+    if(bmi < 18.5 ){
+        status = "kekurangan berat badan"
+    }else if(bmi >= 18.5 && bmi <= 24.9){
+        status = "Normal (IDEAL)"
+    }else if(bmi >= 25 && bmi <= 29.9){
+        status = "kelebihn berat badan"
+    }else{
+        status = "kegemukan (OBESITAS)"
+    }
+
+    let response = {
+        berat : berat,
+        tinggi : tinggi,
+        bmi : bmi,
+        status : status
+    }
+    res.json(response)
+
+})
